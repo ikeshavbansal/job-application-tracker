@@ -1,6 +1,6 @@
 import { Draggable } from "@hello-pangea/dnd";
 
-function Card({ application, index }) {
+function Card({ application, index, onClick, isUpdating }) {
     return (
         <Draggable draggableId={String(application.id)} index={index}>
             {(provided, snapshot) => (
@@ -8,9 +8,10 @@ function Card({ application, index }) {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className={`bg-white rounded-md shadow p-3 ${
+                    onClick={() => onClick(application)}
+                    className={`bg-white rounded-md shadow p-3 cursor-pointer hover:shadow-md transition-all ${
                         snapshot.isDragging ? "ring-2 ring-blue-400" : ""
-                    }`}
+                    } ${isUpdating ? "opacity-50" : ""}`}
                 >
                     <p className="font-medium text-slate-800">
                         {application.role}

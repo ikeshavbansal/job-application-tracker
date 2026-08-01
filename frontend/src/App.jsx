@@ -2,10 +2,12 @@ import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import Board from "./components/Board";
 import AddApplicationModal from "./components/AddApplicationModal";
+import EditApplicationModal from "./components/EditApplicationModal";
 
 function App() {
     const [showModal, setShowModal] = useState(false);
     const [search, setSearch] = useState("");
+    const [editingApplication, setEditingApplication] = useState(null);
 
     return (
         <div className="min-h-screen w-full bg-slate-100 overflow-hidden">
@@ -30,9 +32,15 @@ function App() {
                     + Add Application
                 </button>
             </header>
-            <Board search={search} />
+            <Board search={search} onCardClick={setEditingApplication} />
             {showModal && (
                 <AddApplicationModal onClose={() => setShowModal(false)} />
+            )}
+            {editingApplication && (
+                <EditApplicationModal
+                    application={editingApplication}
+                    onClose={() => setEditingApplication(null)}
+                />
             )}
         </div>
     );

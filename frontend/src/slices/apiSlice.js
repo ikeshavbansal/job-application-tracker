@@ -28,6 +28,21 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ["Application"],
         }),
+        updateApplication: builder.mutation({
+            query: ({ id, ...body }) => ({
+                url: `applications/${id}/`,
+                method: "PATCH",
+                body,
+            }),
+            invalidatesTags: ["Application"],
+        }),
+        deleteApplication: builder.mutation({
+            query: (id) => ({
+                url: `applications/${id}/`,
+                method: "DELETE",
+            }),
+            invalidatesTags: ["Application"],
+        }),
     }),
 });
 
@@ -35,4 +50,6 @@ export const {
     useGetApplicationsQuery,
     useUpdateApplicationStatusMutation,
     useCreateApplicationMutation,
+    useUpdateApplicationMutation,
+    useDeleteApplicationMutation,
 } = apiSlice;

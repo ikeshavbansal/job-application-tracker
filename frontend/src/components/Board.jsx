@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { DragDropContext } from "@hello-pangea/dnd";
 import Column from "./Column";
 import Card from "./Card";
+import BoardSkeleton from "./BoardSkeleton";
 import {
     useGetApplicationsQuery,
     useUpdateApplicationStatusMutation,
@@ -14,18 +16,28 @@ const STATUSES = [
     { key: "rejected", label: "Rejected" },
 ];
 
-function Board({ search }) {
+function Board({ search, onCardClick }) {
     const { data, isLoading, error } = useGetApplicationsQuery(search);
     const [updateStatus] = useUpdateApplicationStatusMutation();
+    const [updatingId, setUpdatingId] = useState(null);
 
-    if (isLoading) return <p className="p-6">Loading...</p>;
+    if (isLoading) return <BoardSkeleton />;
     if (error)
         return <p className="p-6 text-red-600">Error loading applications</p>;
 
-    const handleDragEnd = (result) => {
+    const handleDragEnd = async (result) => {
         const { destination, draggableId } = result;
         if (!destination) return;
-        updateStatus({ id: draggableId, status: destination.droppableId });
+
+        setUpdatingId(draggableId);
+        try {
+            await updateStatus({
+                id: draggableId,
+                status: destination.droppableId,
+            }).unwrap();
+        } finally {
+            setUpdatingId(null);
+        }
     };
 
     return (
@@ -45,6 +57,8 @@ function Board({ search }) {
                                     key={a.id}
                                     application={a}
                                     index={index}
+                                    onClick={onCardClick}
+                                    isUpdating={updatingId === String(a.id)}
                                 />
                             ))}
                         </Column>
