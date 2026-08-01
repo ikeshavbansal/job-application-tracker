@@ -9,7 +9,16 @@ export const apiSlice = createApi({
             query: () => "applications/",
             providesTags: ["Application"],
         }),
+        updateApplicationStatus: builder.mutation({
+            query: ({ id, status }) => ({
+                url: `applications/${id}/`,
+                method: "PATCH",
+                body: { status },
+            }),
+            invalidatesTags: ["Application"],
+        }),
     }),
 });
 
-export const { useGetApplicationsQuery } = apiSlice;
+export const { useGetApplicationsQuery, useUpdateApplicationStatusMutation } =
+    apiSlice;
