@@ -6,7 +6,10 @@ export const apiSlice = createApi({
     tagTypes: ["Application"],
     endpoints: (builder) => ({
         getApplications: builder.query({
-            query: () => "applications/",
+            query: (search = "") =>
+                `applications/${
+                    search ? `?search=${encodeURIComponent(search)}` : ""
+                }`,
             providesTags: ["Application"],
         }),
         updateApplicationStatus: builder.mutation({

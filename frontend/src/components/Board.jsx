@@ -14,8 +14,8 @@ const STATUSES = [
     { key: "rejected", label: "Rejected" },
 ];
 
-function Board() {
-    const { data, isLoading, error } = useGetApplicationsQuery();
+function Board({ search }) {
+    const { data, isLoading, error } = useGetApplicationsQuery(search);
     const [updateStatus] = useUpdateApplicationStatusMutation();
 
     if (isLoading) return <p className="p-6">Loading...</p>;
@@ -24,11 +24,8 @@ function Board() {
 
     const handleDragEnd = (result) => {
         const { destination, draggableId } = result;
-
-        if (!destination) return; // dropped outside any column
-
-        const newStatus = destination.droppableId;
-        updateStatus({ id: draggableId, status: newStatus });
+        if (!destination) return;
+        updateStatus({ id: draggableId, status: destination.droppableId });
     };
 
     return (
