@@ -17,8 +17,19 @@ export const apiSlice = createApi({
             }),
             invalidatesTags: ["Application"],
         }),
+        createApplication: builder.mutation({
+            query: (body) => ({
+                url: "applications/",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: ["Application"],
+        }),
     }),
 });
 
-export const { useGetApplicationsQuery, useUpdateApplicationStatusMutation } =
-    apiSlice;
+export const {
+    useGetApplicationsQuery,
+    useUpdateApplicationStatusMutation,
+    useCreateApplicationMutation,
+} = apiSlice;
