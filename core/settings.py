@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'django_filters',
+    'django_celery_beat',
     'tracker',
 ]
 
@@ -139,4 +140,22 @@ REST_FRAMEWORK = {
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
     ],
+}
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_TIMEZONE = "Asia/Kolkata"
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "job-tracker@localhost"
+NOTIFY_EMAIL = "bansalanshul15@gmail.com"  
+
+# --- Celery Beat schedule ---
+CELERY_BEAT_SCHEDULE = {
+    "send-followup-reminders-daily": {
+        "task": "tracker.tasks.send_followup_reminders",
+        "schedule": 60 * 60 * 24,          #24hours
+    },
 }
