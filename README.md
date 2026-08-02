@@ -23,7 +23,22 @@ A Kanban-style job application tracker built to manage my own job search — tra
 
 ## Running locally
 
-### Backend
+### Option A — Docker (recommended, one command)
+
+Requires Docker Desktop installed and running.
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+This starts Postgres, Redis, the Django backend, Celery worker, Celery beat, and the React frontend together — fully networked, with migrations applied automatically.
+
+Visit `http://localhost:5173` for the app, or `http://localhost:8000/api/health/` to check the API directly.
+
+### Option B — Manual setup (without Docker)
+
+**Backend**
 
 ```bash
 python -m venv venv
@@ -34,14 +49,14 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
-### Celery (requires Redis running on localhost:6379)
+**Celery** (requires Redis running on localhost:6379)
 
 ```bash
 celery -A core worker --loglevel=info
 celery -A core beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
 ```
 
-### Frontend
+**Frontend**
 
 ```bash
 cd frontend
@@ -49,8 +64,4 @@ npm install
 npm run dev
 ```
 
-Visit `http://localhost:5173`.
-
 ## Screenshots
-
-_(add a screenshot of the board here)_
